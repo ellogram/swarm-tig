@@ -27,7 +27,6 @@ services:
           - node.role == worker
 
   grafana:
-    container_name: grafana
     image: grafana/grafana:5.4.3
     ports:
       - "3000:3000"
