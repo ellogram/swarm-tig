@@ -4,7 +4,7 @@ services:
   telegraf:
     image: telegraf:1.9.3
     networks:
-      - tig-net
+      - outside
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     configs:
@@ -18,7 +18,7 @@ services:
   influxdb:
     image: influxdb:1.7.3
     networks:
-      - tig-net
+      - outside
     deploy:
       restart_policy:
         condition: on-failure
@@ -31,7 +31,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - tig-net
+      - outside
     deploy:
       restart_policy:
         condition: on-failure
@@ -46,3 +46,6 @@ configs:
 networks:
   tig-net:
     driver: overlay
+  outside:
+    external:
+      name: "host"
