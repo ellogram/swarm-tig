@@ -11,33 +11,33 @@ services:
       - source: telegraf-config
         target: /etc/telegraf/telegraf.conf
     deploy:
-      restart_policy:
-        condition: on-failure
       mode: global
 
   influxdb:
     image: influxdb:1.7.3
+    ports:
+      - "8086:8086"
     networks:
-      - outside
+      - tig-net
     deploy:
-      restart_policy:
-        condition: on-failure
       placement:
         constraints:
-          - node.role == worker
+          - node.labels.db == true
+          - node.labels.arch == x86
 
   grafana:
     image: grafana/grafana:5.4.3
     ports:
       - "3000:3000"
     networks:
-      - outside
+      - tig-net
     deploy:
-      restart_policy:
-        condition: on-failure
       placement:
         constraints:
           - node.role == manager
+          - node.labels.arch == x86
+        preferences:
+          - spread: node.labels.datacenter
 
 configs:
   telegraf-config:
